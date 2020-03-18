@@ -52,11 +52,12 @@ jobs:
           
       - name: 下载最新的源码
         run: |
-          git clone https://github.com/coolsnowwolf/lede
-          cd lede
+          git clone https://github.com/coolsnowwolf/lede /opt/lede
+          cd /opt/lede
           
       - name: 更新feeds
         run: |
+          /opt/lede
           echo "src-git lienol https://github.com/Lienol/openwrt-package" >>feeds.conf.default
           ./scripts/feeds clean
           ./scripts/feeds update -a
@@ -76,6 +77,7 @@ jobs:
           
       - name: 自定义配置
         run: |
+          /opt/lede
           rm -f ./.config*
           touch ./.config
 
@@ -233,11 +235,13 @@ jobs:
           
       - name: 下载依赖
         run: |
+          /opt/lede
           make download -j8
           find dl -size -1024c -exec rm -f {} \;
 
       - name: 编译固件
         run: |
+          /opt/lede
           make -j$(nproc) || make -j1 V=s
           echo "======================="
           echo "Space usage:"
@@ -248,11 +252,11 @@ jobs:
           du -h --max-depth=1 ./build_dir
           du -h --max-depth=1 ./bin
 
-      - name: 打包固件
-        run: find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+      - name: 检查固件
+        run: find /opt/lede/bin/targets/ -type d -name "packages" | xargs rm -rf {}
 
       - name: 上传固件
         uses: actions/upload-artifact@master
         with:
           name: OpenWrt firmware
-          path: ./bin/targets/
+          path: /opt/lede/bin/targets/
