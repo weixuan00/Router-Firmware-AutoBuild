@@ -57,7 +57,7 @@ jobs:
           
       - name: 更新feeds
         run: |
-          /opt/lede
+          cd /opt/lede
           echo "src-git lienol https://github.com/Lienol/openwrt-package" >>feeds.conf.default
           ./scripts/feeds clean
           ./scripts/feeds update -a
@@ -77,7 +77,7 @@ jobs:
           
       - name: 自定义配置
         run: |
-          /opt/lede
+          cd /opt/lede
           rm -f ./.config*
           touch ./.config
 
@@ -235,13 +235,13 @@ jobs:
           
       - name: 下载依赖
         run: |
-          /opt/lede
+          cd /opt/lede
           make download -j8
           find dl -size -1024c -exec rm -f {} \;
 
       - name: 编译固件
         run: |
-          /opt/lede
+          cd /opt/lede
           make -j$(nproc) || make -j1 V=s
           echo "======================="
           echo "Space usage:"
