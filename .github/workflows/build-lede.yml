@@ -15,8 +15,8 @@ on:
   push:
     tags:
     - 'v*'
-    branches: 
-      - master
+    #branches: 
+      #- master
   
 jobs:
   build:
